@@ -57,10 +57,21 @@ end;
 
 for _, pn in pairs(GAMESTATE:GetEnabledPlayers()) do
 t[#t+1] = Def.ActorFrame{
+	InitCommand = function(s) s:x(m "GradePNX"):y(m "GradePNY"):playcommand("Set") end,
+	OnCommand = m "GradePNOnCommand",
+	OffCommand = m "GradePNOffCommand",
 	Def.Sprite{
-		InitCommand = function(s) s:x(m "GradePNX"):y(m "GradePNY"):playcommand("Set") end,
-		OnCommand = m "GradePNOnCommand",
-		OffCommand = m "GradePNOffCommand",
+		SetCommand= function(s)
+			local failed = STATSMAN:GetCurStageStats():GetPlayerStageStats(pn):GetFailed();
+			if failed then
+				s:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/GradeDisplayEval Failed"))
+			else
+				s:Load(THEME:GetPathB("ScreenEvaluation decorations/grade/GradeDisplayEval", ToEnumShortString(tier)))
+			end;
+		end;
+	};
+	Def.Sprite{
+		InitCommand = function(s) s:zoomy(-1):y(110):diffusealpha(0.25):fadetop(1):playcommand("Set") end,
 		SetCommand= function(s)
 			local failed = STATSMAN:GetCurStageStats():GetPlayerStageStats(pn):GetFailed();
 			if failed then

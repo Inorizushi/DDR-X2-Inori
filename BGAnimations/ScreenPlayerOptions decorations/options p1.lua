@@ -107,8 +107,11 @@ local function MakeRow(rownames, idx)
 						self:settext(DisplayNameRow)
 						local Default = THEME:GetString("OptionItemNames",THEME:GetMetric( "ScreenOptionsMaster",name.."Explanation" ).."0")
 						local SpeedFix = THEME:GetString("OptionItemNames","Speed3" )
+						local RiskyFix = THEME:GetString("OptionItemNames","Risky1" )
 						if CurrentRowName == name then
-							if DisplayNameRow == Default or DisplayNameRow == SpeedFix then
+							if DisplayNameRow == RiskyFix then
+								self:diffuse(Color.Red)
+							elseif DisplayNameRow == Default or DisplayNameRow == SpeedFix then
 								self:diffuse(color("#07ff07"))
 							else
 								self:diffuse(color("1,1,1,1"))
@@ -239,9 +242,6 @@ t[#t+1] = Def.ActorFrame{
 		MenuUpP1MessageCommand=function(self) MESSAGEMAN:Broadcast("MenuInput", { Player = PLAYER_1, Input = "Up", }); end;
 		MenuDownP1MessageCommand=function(self) MESSAGEMAN:Broadcast("MenuInput", { Player = PLAYER_1, Input = "Down", }); end;
 		MenuStartP1MessageCommand=function(self) MESSAGEMAN:Broadcast("MenuInput", { Player = PLAYER_1, Input = "Start", }); end;
-		CodeMessageCommand=function(self,param)
-			MESSAGEMAN:Broadcast("MenuInput", { Player = param.PlayerNumber, Input = param.Name, })
-		end;
 
 		MenuInputMessageCommand=function(self,param)
 			-- direction
@@ -258,6 +258,8 @@ t[#t+1] = Def.ActorFrame{
 				elseif curIndex >= 15 then
 					curIndex = 1
 				end
+			elseif param.Input == "Start" and param.Player == PLAYER_1 then
+				curIndex = 15
 			end
 			MESSAGEMAN:Broadcast("MoveScrollerP1",{Input = param.Input});
 		end

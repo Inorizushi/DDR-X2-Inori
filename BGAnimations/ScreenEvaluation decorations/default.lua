@@ -72,6 +72,10 @@ t[#t+1] = StandardDecorationFromFileOptional("SongInformation","SongInformation"
 
 };
 
+for _, pn in pairs(GAMESTATE:GetEnabledPlayers()) do
+	t[#t+1] = LoadActor("grade", pn)
+end
+
 t[#t+1] = LoadActor("jacket frame")..{
 	InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y-180;zoomy,0;diffusealpha,0.8;sleep,0.000;);
 	OnCommand=cmd(sleep,0.333;decelerate,0.133;diffusealpha,0.8;accelerate,0.033;zoomy,1.07;zoomx,1.07;decelerate,0.033;zoomx,1;zoomy,1);
@@ -81,7 +85,7 @@ t[#t+1] = LoadActor("jacket frame")..{
 t[#t+1] = Def.ActorFrame{
 	InitCommand=cmd(CenterX;y,SCREEN_CENTER_Y-64);
 	OnCommand=cmd(zoomy,0;sleep,0.333;linear,0.2;zoomy,1);
-	OffCommand=cmd(sleep,0.4;linear,0.4;zoomy,0);
+	OffCommand=cmd(sleep,0.2;linear,0.2;zoomy,0);
 	LoadActor("judgement frame")..{
 		InitCommand=cmd(valign,0);
 	};
@@ -91,9 +95,17 @@ t[#t+1] = Def.ActorFrame{
 };
 
 local xPosPlayer = {
-    P1 = (SCREEN_CENTER_X-340),
-    P2 = (SCREEN_CENTER_X+340)
-}
+    P1 = (SCREEN_CENTER_X-348),
+    P2 = (SCREEN_CENTER_X+348)
+};
+
+local DiffToInd = {
+	['Difficulty_Beginner'] = 0;
+	['Difficulty_Easy'] = 1;
+	['Difficulty_Medium'] = 2;
+	['Difficulty_Hard'] = 3;
+	['Difficulty_Challenge'] = 4;
+};
 
 for _, pn in pairs(GAMESTATE:GetEnabledPlayers()) do
 	t[#t+1] = Def.ActorFrame{
@@ -103,78 +115,49 @@ for _, pn in pairs(GAMESTATE:GetEnabledPlayers()) do
 				self:x(xPosPlayer[short]):y(SCREEN_CENTER_Y-30)
 			end,
 			OnCommand=cmd(zoomy,0;sleep,0.7;linear,0.2;zoomy,1);
-			OffCommand=cmd(sleep,0.7;linear,0.2;zoomy,0);
-		}
-	}
-	t[#t+1] = LoadActor("P1 label")..{
-		InitCommand=function(self)
-			if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
-				self:diffusealpha(1)
-			else
-				self:diffusealpha(0)
+			OffCommand=cmd(linear,0.2;zoomy,0);
+		};
+		Def.Sprite{
+			InitCommand=function(self)
+				self:Load(THEME:GetPathB("","ScreenEvaluationSummary decorations/Player 1x2"));
+				self:pause():setstate(pn=="PlayerNumber_P2" and 1 or 0)
+				self:x(pn=="PlayerNumber_P2" and _screen.cx+374 or _screen.cx-326):y(_screen.cy-42)
 			end;
-			self:x(SCREEN_CENTER_X-334):y(SCREEN_CENTER_Y-40)
-		end;
-		OnCommand=cmd(zoomy,0;sleep,1;linear,0.2;zoomy,1);
-		OffCommand=cmd(sleep,1;linear,0.2;zoomy,0);
-	};
-	t[#t+1] = LoadActor("P2 label")..{
-		InitCommand=function(self)
-			if GAMESTATE:IsPlayerEnabled(PLAYER_2) then
-				self:diffusealpha(1)
-			else
-				self:diffusealpha(0)
+			OnCommand=cmd(zoomy,0;sleep,1;linear,0.2;zoomy,1);
+			OffCommand=cmd(linear,0.2;zoomy,0);
+		};
+		Def.Sprite{
+			InitCommand=function(self)
+				if pn==PLAYER_1 then
+					self:Load(THEME:GetPathG("","_sharedX2/P1 BADGE"))
+				else
+					self:Load(THEME:GetPathG("","_sharedX2/P2 BADGE"))
+				end;
+				self:x(pn=="PlayerNumber_P2" and _screen.cx+276 or _screen.cx-420):y(_screen.cy-32)
 			end;
-			self:x(SCREEN_CENTER_X+334):y(SCREEN_CENTER_Y-40)
-		end;
-		OnCommand=cmd(zoomy,0;sleep,1;linear,0.2;zoomy,1);
-		OffCommand=cmd(sleep,1;linear,0.2;zoomy,0);
-	};
-	t[#t+1] = LoadActor(THEME:GetPathG("","_sharedX2/P1 BADGE"))..{
-		InitCommand=function(self)
-			if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
-				self:diffusealpha(1)
-			else
-				self:diffusealpha(0)
+			OnCommand=cmd(diffusealpha,0;rotationz,90;sleep,1;linear,0.2;rotationz,0;diffusealpha,1);
+			OffCommand=cmd(linear,0.2;rotationz,90;diffusealpha,0);
+		};
+		Def.Sprite{
+			Texture="Diff 1x5";
+			InitCommand=function(self)
+				self:pause()
+				self:x(pn=="PlayerNumber_P2" and _screen.cx+388 or _screen.cx-309):y(_screen.cy-20)
+				local song = GAMESTATE:GetCurrentSong()
+				local steps = GAMESTATE:GetCurrentSteps(pn):GetDifficulty()
+				if song then
+					self:setstate(DiffToInd[steps])
+				end
 			end;
-			self:x(SCREEN_CENTER_X-420):y(SCREEN_CENTER_Y-32)
-		end;
-		OnCommand=cmd(diffusealpha,0;rotationz,90;sleep,1;linear,0.2;rotationz,0;diffusealpha,1);
-		OffCommand=cmd(sleep,1;linear,0.2;rotationz,90;diffusealpha,0);
-	};
-	t[#t+1] = LoadActor(THEME:GetPathG("","_sharedX2/P2 BADGE"))..{
-		InitCommand=function(self)
-			if GAMESTATE:IsPlayerEnabled(PLAYER_2) then
-				self:diffusealpha(1)
-			else
-				self:diffusealpha(0)
-			end;
-			self:x(SCREEN_CENTER_X+420):y(SCREEN_CENTER_Y-32)
-		end;
+			OnCommand=cmd(diffusealpha,0;zoomy,0;sleep,1.05;linear,0.2;zoomy,1;diffusealpha,1);
+			OffCommand=cmd(linear,0.2;zoomy,0);
+		};
 	};
 end
-
-t[#t+1] = Def.ActorFrame{
-	LoadActor("score")..{
-		InitCommand=cmd(CenterX;y,SCREEN_CENTER_Y+228);
-	};
-};
 
 t[#t+1] = LoadActor("../grade")..{
 	OnCommand=cmd(play);
 };
-
-if ShowStandardDecoration("DifficultyIcon") then
-	if GAMESTATE:GetPlayMode() == 'PlayMode_Rave' then
-		-- in rave mode, we always have two players.
-	else
-		-- otherwise, we only want the human players
-		for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
-			local diffIcon = LoadActor(THEME:GetPathG(Var "LoadingScreen", "DifficultyIcon"), pn)
-			t[#t+1] = StandardDecorationFromTable("DifficultyIcon" .. ToEnumShortString(pn), diffIcon);
-		end
-	end
-end
 
 t[#t+1] = Def.ActorFrame {
   InitCommand=cmd(xy,SCREEN_CENTER_X-180,SCREEN_CENTER_Y-180);
@@ -212,9 +195,6 @@ t[#t+1] = Def.ActorFrame {
 		OnCommand=cmd(play);
 	};
 };
-for _, pn in pairs(GAMESTATE:GetEnabledPlayers()) do
-	t[#t+1] = LoadActor("grade", pn)
-end
 --StatsP1--
 t[#t+1] = LoadActor("statsP1")..{
 	InitCommand=cmd(visible,GAMESTATE:IsHumanPlayer(PLAYER_1);addy,0;zoom,1;x,SCREEN_CENTER_X-100;diffusealpha,0);
@@ -234,26 +214,34 @@ t[#t+1] = LoadActor("statsP2")..{
 	end;
 	};
 
-	--Score
-	t[#t+1] = Def.RollingNumbers {
-				File = THEME:GetPathF("_sveningsson Bold", "60px");
-				InitCommand=cmd(diffuse,Color("Yellow");strokecolor,color("#463e00");x,SCREEN_CENTER_X-340;y,SCREEN_CENTER_Y+228;zoomx,0.55;zoomy,0.4;player,PLAYER_1;playcommand,"Set");
-				SetCommand = function(self)
-					local score = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_1):GetScore();
-					self:Load("RollingNumbersEvaluation");
-					self:targetnumber(score);
-				end;
-				OffCommand=cmd(sleep,0.067;zoom,0);
-			};
-	t[#t+1] = Def.RollingNumbers {
-				File = THEME:GetPathF("_sveningsson Bold", "60px");
-				InitCommand=cmd(diffuse,Color("Yellow");strokecolor,color("#463e00");x,SCREEN_CENTER_X+340;y,SCREEN_CENTER_Y+228;zoomx,0.55;zoomy,0.4;player,PLAYER_2;playcommand,"Set");
-				SetCommand = function(self)
-					local score = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_2):GetScore();
-					self:Load("RollingNumbersEvaluation");
-					self:targetnumber(score);
-				end;
-				OffCommand=cmd(sleep,0.067;zoom,0);
-			};
+	t[#t+1] = Def.ActorFrame{
+		LoadActor("score")..{
+			InitCommand=cmd(CenterX;y,SCREEN_CENTER_Y+228);
+			OnCommand=cmd(zoomy,0;sleep,0.8;linear,0.2;zoomy,1);
+			OffCommand=cmd(linear,0.2;zoomy,0);
+		};
+		Def.RollingNumbers {
+			File = THEME:GetPathF("_sveningsson Bold", "60px");
+			InitCommand=cmd(diffuse,Color("Yellow");strokecolor,color("#463e00");x,SCREEN_CENTER_X-340;y,SCREEN_CENTER_Y+228;zoomx,0.55;zoomy,0.4;player,PLAYER_1;playcommand,"Set");
+			SetCommand = function(self)
+				local score = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_1):GetScore();
+				self:Load("RollingNumbersSumm");
+				self:targetnumber(score);
+			end;
+			OnCommand=cmd(diffusealpha,0;sleep,1;diffusealpha,1);
+			OffCommand=cmd(sleep,0.067;zoom,0);
+		};
+		Def.RollingNumbers {
+			File = THEME:GetPathF("_sveningsson Bold", "60px");
+			InitCommand=cmd(diffuse,Color("Yellow");strokecolor,color("#463e00");x,SCREEN_CENTER_X+340;y,SCREEN_CENTER_Y+228;zoomx,0.55;zoomy,0.4;player,PLAYER_2;playcommand,"Set");
+			SetCommand = function(self)
+				local score = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_2):GetScore();
+				self:Load("RollingNumbersSumm");
+				self:targetnumber(score);
+			end;
+			OnCommand=cmd(diffusealpha,0;sleep,1;diffusealpha,1);
+			OffCommand=cmd(sleep,0.067;zoom,0);
+		};
+	};
 
 return t
