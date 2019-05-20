@@ -8,7 +8,7 @@ local stages = Def.ActorFrame {
 local ScreenName = Var "LoadingScreen";
 
 function MakeBitmapText()
-	return LoadFont("_arial Bold 24px") .. {
+	return LoadFont("StageNum 24px") .. {
 		InitCommand=cmd(zoomx,2;zoomy,1;maxwidth,144);
 	};
 end

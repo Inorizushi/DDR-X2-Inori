@@ -19,13 +19,13 @@ t[#t+1] = Def.ActorFrame{
 		local staw = STATSMAN:GetCurStageStats():GetPlayerStageStats(pn):GetStageAward();
 			if staw ~= nil then
 				if((staw =="StageAward_SingleDigitW4") or (staw =="StageAward_OneW4") or (staw =="StageAward_FullComboW4") or string.find(staw,"W4")) then
-					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/GoodFullcombo_ring.png"));
+					self:Load(THEME:GetPathB("","ScreenEvaluationNormal overlay/grade/GoodFullcombo_ring.png"));
 				elseif((staw =="StageAward_SingleDigitW3") or (staw =="StageAward_OneW3") or (staw =="StageAward_FullComboW3") or string.find(staw,"W3")) then
-					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/GreatFullcombo_ring.png"));
+					self:Load(THEME:GetPathB("","ScreenEvaluationNormal overlay/grade/GreatFullcombo_ring.png"));
 				elseif((staw =="StageAward_SingleDigitW2") or (staw =="StageAward_OneW2") or (staw =="StageAward_FullComboW2") ) then
-					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/PerfectFullcombo_ring.png"));
+					self:Load(THEME:GetPathB("","ScreenEvaluationNormal overlay/grade/PerfectFullcombo_ring.png"));
 				elseif (staw =="StageAward_FullComboW1") then
-					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/MarvelousFullcombo_ring.png"));
+					self:Load(THEME:GetPathB("","ScreenEvaluationNormal overlay/grade/MarvelousFullcombo_ring.png"));
 				end;
 				(cmd(linear,0.2;zoom,0.65;spin;effectmagnitude,0,0,170))(self);
 			end;
@@ -39,13 +39,13 @@ t[#t+1] = Def.ActorFrame{
 		local staw = STATSMAN:GetCurStageStats():GetPlayerStageStats(pn):GetStageAward();
 			if staw ~= nil then
 				if((staw =="StageAward_SingleDigitW4") or (staw =="StageAward_OneW4") or (staw =="StageAward_FullComboW4") or string.find(staw,"W4")) then
-					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/GoodFullcombo_lines.png"));
+					self:Load(THEME:GetPathB("","ScreenEvaluationNormal overlay/grade/GoodFullcombo_lines.png"));
 			elseif((staw =="StageAward_SingleDigitW3") or (staw =="StageAward_OneW3") or (staw =="StageAward_FullComboW3") or string.find(staw,"W3")) then
-					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/GreatFullcombo_lines.png"));
+					self:Load(THEME:GetPathB("","ScreenEvaluationNormal overlay/grade/GreatFullcombo_lines.png"));
 				elseif((staw =="StageAward_SingleDigitW2") or (staw =="StageAward_OneW2") or (staw =="StageAward_FullComboW2") ) then
-					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/PerfectFullcombo_lines.png"));
+					self:Load(THEME:GetPathB("","ScreenEvaluationNormal overlay/grade/PerfectFullcombo_lines.png"));
 				elseif (staw =="StageAward_FullComboW1") then
-					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/MarvelousFullcombo_lines.png"));
+					self:Load(THEME:GetPathB("","ScreenEvaluationNormal overlay/grade/MarvelousFullcombo_lines.png"));
 				end;
 				(cmd(linear,0.2;zoom,0.65;spin;effectmagnitude,0,0,-170))(self);
 			end;
@@ -64,9 +64,9 @@ t[#t+1] = Def.ActorFrame{
 		SetCommand= function(s)
 			local failed = STATSMAN:GetCurStageStats():GetPlayerStageStats(pn):GetFailed();
 			if failed then
-				s:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/GradeDisplayEval Failed"))
+				s:Load(THEME:GetPathB("","ScreenEvaluationNormal overlay/grade/GradeDisplayEval Failed"))
 			else
-				s:Load(THEME:GetPathB("ScreenEvaluation decorations/grade/GradeDisplayEval", ToEnumShortString(tier)))
+				s:Load(THEME:GetPathB("ScreenEvaluationNormal overlay/grade/GradeDisplayEval", ToEnumShortString(tier)))
 			end;
 		end;
 	};

@@ -1,4 +1,4 @@
 return Def.ActorFrame{
-  InitCommand=cmd(Center);
+  InitCommand=cmd(Center;diffusealpha,0);
   LoadActor("base");
 };

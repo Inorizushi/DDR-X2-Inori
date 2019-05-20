@@ -145,7 +145,11 @@ local function MakeRow(rownames, idx)
 							self:diffuse(color(diffcolor[choice]))
 						end;
 					elseif DisplayName == "CHARACTERS" then
-						self:settext(Characters.GetAllCharacterNames()[choice])
+						if choice == 0 then
+							self:settext(THEME:GetString('OptionNames','Off'))
+						else
+							self:settext(Characters.GetAllCharacterNames()[choice])
+						end;
 						if CurrentRowName == name then
 							self:diffuse(color("#FFFFFF"))
 						end;
@@ -208,13 +212,13 @@ local function MakeRow(rownames, idx)
 			GainFocusCommand=function(self)
 				self:finishtweening()
 				self:diffuseshift():diffusealpha(1):effectcolor1(color("1,1,1,1")):effectcolor2(color("0.5,0.5,0.5,1")):effectperiod(1)
-				self:playcommand("Set")
+				self:queuecommand("Set")
 			end;
 			LoseFocusCommand=function(self)
 				self:finishtweening()
 				self:stopeffect()
 				self:diffusealpha(0)
-				self:playcommand("Set")
+				self:queuecommand("Set")
 			end;
 		};
 	};
@@ -254,8 +258,6 @@ t[#t+1] = Def.ActorFrame{
 				elseif curIndex >= 15 then
 					curIndex = 1
 				end
-			elseif param.Input == "Start" and param.Player == PLAYER_1 then
-				curIndex = 15
 			end
 			MESSAGEMAN:Broadcast("MoveScrollerP1",{Input = param.Input});
 		end

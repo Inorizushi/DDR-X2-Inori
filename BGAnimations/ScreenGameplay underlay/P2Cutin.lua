@@ -49,7 +49,7 @@ t[#t+1] = Def.ActorFrame{
 -- Cutin background --
 LoadActor("Back") .. {
   InitCommand=function(self)
-    self:setsize(200,480)
+    self:setsize(300,720)
     self:diffusealpha(0)
     self:MaskDest();
   end;
@@ -70,9 +70,10 @@ Def.Sprite {
     self:MaskDest();
     self:diffusealpha(0);
     if charP2Ver <= 2 then
-      self:setsize(200,480)
+      self:setsize(300,720)
+      self:zoom(1.5)
     else
-      self:scaletoclipped(200,480)
+      self:scaletoclipped(300,720)
     end;
     if style == "StyleType_TwoPlayersTwoSides" or GAMESTATE:GetPlayMode() == 'PlayMode_Rave' then
       self:y(50)
@@ -118,9 +119,10 @@ Def.Sprite {
     self:MaskDest();
     self:diffusealpha(0);
     if charP2Ver <= 2 then
-      self:setsize(200,480)
+      self:setsize(300,720)
+      self:zoom(1.5)
     else
-      self:scaletoclipped(200,480)
+      self:scaletoclipped(300,720)
     end;
     if style == "StyleType_TwoPlayersTwoSides" or GAMESTATE:GetPlayMode() == 'PlayMode_Rave' then
       self:y(50)
@@ -167,9 +169,10 @@ Def.Sprite {
     self:MaskDest();
     self:diffusealpha(0);
     if charP2Ver <= 2 then
-      self:setsize(200,480)
+      self:setsize(300,720)
+      self:zoom(1.5)
     else
-      self:scaletoclipped(200,480)
+      self:scaletoclipped(300,720)
     end;
     if style == "StyleType_TwoPlayersTwoSides" or GAMESTATE:GetPlayMode() == 'PlayMode_Rave' then
       self:y(50)

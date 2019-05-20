@@ -25,7 +25,7 @@ elseif screenName == "ScreenDataSaveSummary" then
 elseif screenName == "ScreenEvaluationNormal" then
 	headerTextImage = "Results.png"
 elseif screenName == "ScreenEvaluationSummary" then
-	headerTextImage = "Results.png"
+	headerTextImage = "ResultsSummary.png"
 elseif screenName == "ScreenEvaluationOni" then
 	headerTextImage = "Results.png"
 elseif screenName == "ScreenEvaluationNonstop" then
@@ -52,7 +52,7 @@ end
 
 table.insert(out,LoadActor("pro.png")..{
 	InitCommand=function(self)
-		if screenName == "ScreenSelectMusic" then
+		if screenName == "ScreenSelectMusic" or screenName == "ScreenEvaluationSummary" or screenName == "ScreenEvaluationNormal" then
 			self:visible(true)
 		else
 			self:visible(false)

@@ -1,101 +1,36 @@
--- Base from CyberiaStyle 7 by gl_yukt
-
 local st = GAMESTATE:GetCurrentStyle():GetStepsType();
-
-function Actor:zoom_to_banner_Summary()
-	-- スクエアバナー用
-	if self:GetWidth() == self:GetHeight() then
-	--	self:zoomto(128,128);
-		self:zoomto(58,58);
-	-- マリオ用
-	elseif (self:GetWidth() * 2) / 5 == self:GetHeight() then
-		self:zoomto(58,32);
-	-- ホッテストパーティー1・2 フルフルパーティー　Winx-Club Disney-Grooves用
-	elseif (self:GetWidth() * 55) / 113 == self:GetHeight() then
-		self:zoomto(58,32);
-	else
-	-- その他、通常DDR
-		self:zoomto(58,32);
-	end
-end
-
-function Actor:zoom_to_banner_Summary_line()
-	-- スクエアバナー用
-	if self:GetWidth() == self:GetHeight() then
-		self:zoomto(58,58);
-	-- マリオ用
-	elseif (self:GetWidth() * 2) / 5 == self:GetHeight() then
-		self:zoomto(54,22.8);
-	-- ホッテストパーティー1・2 フルフルパーティー　Winx-Club Disney-Grooves用
-	elseif (self:GetWidth() * 55) / 113 == self:GetHeight() then
-		self:zoomto(49,25);
-	else
-	-- その他、通常DDR
-		self:zoomto(55,19);
-	end
-end
 
 local mStages = STATSMAN:GetStagesPlayed();
 local i = 0;
-
-local DifficultyToFrame = {
-	Difficulty_Beginner	= color("#5fbee2"),
-	Difficulty_Easy		= color("#ffff00"),
-	Difficulty_Medium	= color("#f16c7c"),
-	Difficulty_Hard		= color("#00ff00"),
-	Difficulty_Challenge	= color("#cc66ff"),
-	Difficulty_Edit 	= color("#ffffff"),
-	Difficulty_None		= color("#ffffff"),
-};
-
 local t = Def.ActorFrame {};
+local screen = Var("LoadingScreen")
 
--- Grade back
-t[#t+1] = Def.ActorFrame {
-	InitCommand=function(self)
-		self:x(SCREEN_CENTER_X);
-		self:y(SCREEN_CENTER_Y);
-		if mStages == 1 then
---			self:addy(-50);
-			self:addy(0);
-		elseif mStages == 2 then
---			self:addy(-75);
-			self:addy(0);
-		elseif mStages == 3 then
---			self:addy(-100);
-			self:addy(0);
-		elseif mStages == 4 then
---			self:addy(-125);
-			self:addy(0);
-		elseif mStages == 5 then
---			self:addy(-150);
-			self:addy(0);
-		elseif mStages == 6 then
---			self:addy(-162.5);
-			self:addy(0);
-		elseif mStages == 7 then
---			self:addy(-162.5);
-			self:addy(0);
-		else
---			self:addy(-50);
-			self:addy(0);
+t[#t+1] = StandardDecorationFromFileOptional("Header","Header");
+
+t[#t+1] = Def.ActorFrame{
+	LoadActor("large page")..{
+		InitCommand=cmd(CenterX;valign,0;y,_screen.cy-150);
+		BeginCommand=function(self)
+			local ysize;
+			if mStages == 2 then
+				ysize = 300
+			elseif mStages == 3 then
+				ysize = 300
+			elseif mStages == 4 then
+				ysize = 300
+			elseif mStages == 5 then
+				ysize = 300
+			elseif mStages == 6 then
+				ysize = 300
+			elseif mStages == 7 then
+				ysize = 300
+			else
+				ysize = 300
+			end;
+			self:setsize(1004,ysize)
 		end;
-	end;
-
-
-	-- 1P Text
-	LoadActor("1P") .. {
-		InitCommand=cmd(x,-350;y,-190);
-		OnCommand = cmd(zoomx,1;zoomy,0;sleep,0.25;linear,0.25;zoomy,1);
-		OffCommand=cmd(linear,0.15;zoomy,0;);
-		Condition=GAMESTATE:IsSideJoined(PLAYER_1);
-	};
-	-- 2P Text
-	LoadActor("2P") .. {
-		InitCommand=cmd(x,350;y,-190);
-		OnCommand = cmd(zoomx,1;zoomy,0;sleep,0.25;linear,0.25;zoomy,1);
-		OffCommand=cmd(linear,0.15;zoomy,0;);
-		Condition=GAMESTATE:IsSideJoined(PLAYER_2);
+		OnCommand=cmd(zoomy,0;sleep,0.2;decelerate,0.4;zoomy,1);
+		OffCommand=cmd(linear,0.2;zoomy,0);
 	};
 };
 
@@ -106,96 +41,82 @@ for i = 1, mStages do
 		InitCommand=cmd(Center);
 		BeginCommand=function(self)
 			if mStages == 2 then
-				self:addy(-25 + ((mStages - i) * 68));
+				self:addy(-80 + ((mStages - i) * 70));
 			elseif mStages == 3 then
-				self:addy(-50 + ((mStages - i) * 68));
+				self:addy(-80 + ((mStages - i) * 70));
 			elseif mStages == 4 then
-				self:addy(-75 + ((mStages - i) * 68));
+				self:addy(-80 + ((mStages - i) * 70));
 			elseif mStages == 5 then
-				self:addy(-100 + ((mStages - i) * 68));
+				self:addy(-208 + ((mStages - i) * 112));
 			elseif mStages == 6 then
-				self:addy(-100 + ((mStages - i) * 68));
+				self:addy(-208 + ((mStages - i) * 112));
 			elseif mStages == 7 then
-				self:addy(-100 + ((mStages - i) * 68));
+				self:addy(-208 + ((mStages - i) * 112));
 			else
-				self:addy(((mStages - i) * 68));
+				self:addy(((mStages - i) * 112));
 			end;
 		end;
 
-		LoadActor( "BannerCenter" ) .. {
-			InitCommand=cmd(diffusealpha,0;y,10);
-			OnCommand=cmd(sleep,0.25;diffusealpha,1);
+		Def.ActorFrame{
+			OnCommand=cmd(diffusealpha,0;sleep,0.4;diffusealpha,0.1);
 			OffCommand=cmd(diffusealpha,0);
-		};
+			Def.Quad{
+				InitCommand=cmd(diffuse,Color.Black;setsize,954,2;y,-24);
 
-		-- banner line
-		Def.Sprite {
-			BeginCommand=function(self)
-				local sssong = ssStats:GetPlayedSongs()[1];
-				self:x(-179);
-				self:y(10);
-				self:LoadBackground(sssong:GetJacketPath());
-				self:zoom_to_banner_Summary_line();
-				self:diffuse(color("#000000"));
-			end;
-			OnCommand=function(self)
-				self:zoomy(0);
-				self:sleep(0.25+(i-mStages)*-0.1);
-				self:linear(0.2);
-				self:zoom_to_banner_Summary_line();
-			end;
-			OffCommand=cmd(linear,0.25;zoomy,0);
+			};
+			Def.Quad{
+				InitCommand=cmd(diffuse,Color.Black;setsize,954,2;y,46);
+			};
 		};
-
 		-- banner
 		Def.Sprite {
 			BeginCommand=function(self)
 				local sssong = ssStats:GetPlayedSongs()[1];
-				self:x(-180);
+				self:x(-176);
 				self:y(10);
 				self:LoadBackground(sssong:GetJacketPath());
-				self:zoom_to_banner_Summary();
+				self:zoomto(52,52);
 			end;
 			OnCommand=function(self)
 				self:zoomy(0);
 				self:sleep(0.25+(i-mStages)*-0.1);
 				self:linear(0.2);
-				self:zoom_to_banner_Summary();
+				self:zoomto(52,52);
 			end;
 			OffCommand=cmd(linear,0.25;zoomy,0);
 		};
 
 		-- Title
-		LoadFont("_russellsquare Bold 24px")..{
-			InitCommand=cmd(zoomx,0.83;zoomy,0.65;maxwidth,263;diffuse,color("#000000");strokecolor,color("#ffffff"));
+		LoadFont("_helvetica Bold 24px")..{
+			InitCommand=cmd(maxwidth,250;diffuse,Color.Black;strokecolor,Color.White);
 			BeginCommand=function(self)
 				local sssong = ssStats:GetPlayedSongs()[1];
 				local sssmaint = sssong:GetDisplayMainTitle();
-				self:x(26);
+				self:x(50);
 				self:settext(sssmaint);
 				if sssong:GetDisplaySubTitle() == "" then
-					self:y(0);
+					self:y(-3);
 				else
-					self:y(0);
+					self:y(-3);
 				end;
 			end;
 			OnCommand=function(self)
 				self:zoomy(0);
 				self:sleep(0.25+(i-mStages)*-0.1);
 				self:linear(0.2);
-				self:zoomy(0.65);
+				self:zoomy(1);
 			end;
 			OffCommand=cmd(diffusealpha,0);
 		};
 
 		-- SubTitle
-		LoadFont("_russellsquare Bold 24px")..{
-			InitCommand=cmd(zoomx,0.57;zoomy,0.45;maxwidth,383;diffuse,color("#000000");strokecolor,color("#ffffff"));
+		LoadFont("_helvetica Bold 24px")..{
+			InitCommand=cmd(maxwidth,383;zoom,0.6;diffuse,Color.Black;strokecolor,Color.White);
 			BeginCommand=function(self)
 				local sssong = ssStats:GetPlayedSongs()[1];
 				local ssssubt = sssong:GetDisplaySubTitle();
-				self:x(26);
-				self:y(0.6);
+				self:x(50);
+				self:y(15);
 				self:settext(ssssubt);
 				if sssong:GetDisplaySubTitle() ~= "" then
 					self:visible(true);
@@ -207,37 +128,31 @@ for i = 1, mStages do
 				self:zoomy(0);
 				self:sleep(0.25+(i-mStages)*-0.1);
 				self:linear(0.2);
-				self:zoomy(0.45);
+				self:zoomy(0.6);
 			end;
 			OffCommand=cmd(diffusealpha,0);
 		};
-
-		-- Artist
-		LoadFont("_futura std medium 20px")..{
-			InitCommand=cmd(zoomx,1;zoomy,2;maxwidth,500;diffuse,color("#000000");strokecolor,color("#ffffff"));
+		LoadFont("_helvetica Bold 24px")..{
+			InitCommand=cmd(maxwidth,383;zoom,0.8;diffuse,Color.Black;strokecolor,Color.White);
 			BeginCommand=function(self)
 				local sssong = ssStats:GetPlayedSongs()[1];
-				local sssartistt = sssong:GetDisplayArtist();
-				if sssong:GetDisplaySubTitle() == "" then
-					self:y(20);
-				else
-					self:y(20);
-				end;
-				self:x(26);
-				self:settext(sssartistt);
+				local sssart = sssong:GetDisplayArtist();
+				self:x(50);
+				self:y(23);
+				self:settext(sssart);
 			end;
 			OnCommand=function(self)
 				self:zoomy(0);
 				self:sleep(0.25+(i-mStages)*-0.1);
 				self:linear(0.2);
-				self:zoomy(0.6);
+				self:zoomy(0.8);
 			end;
 			OffCommand=cmd(diffusealpha,0);
 		};
 	};
 end;
 
-for pn in ivalues(PlayerNumber) do
+for _, pn in pairs(GAMESTATE:GetEnabledPlayers()) do
 	for i = 1, mStages do
 
 	local sStats = STATSMAN:GetPlayedStageStats( i );
@@ -262,19 +177,19 @@ for pn in ivalues(PlayerNumber) do
 		InitCommand=cmd(player,pn;Center);
 		BeginCommand=function(self)
 			if mStages == 2 then
-				self:addy(-25 + ((mStages - i) * 68));
+				self:addy(-80 + ((mStages - i) * 70));
 			elseif mStages == 3 then
-				self:addy(-50 + ((mStages - i) * 68));
+				self:addy(-80 + ((mStages - i) * 70));
 			elseif mStages == 4 then
-				self:addy(-75 + ((mStages - i) * 68));
+				self:addy(-80 + ((mStages - i) * 70));
 			elseif mStages == 5 then
-				self:addy(-100 + ((mStages - i) * 68));
+				self:addy(-208 + ((mStages - i) * 112));
 			elseif mStages == 6 then
-				self:addy(-100 + ((mStages - i) * 68));
+				self:addy(-208 + ((mStages - i) * 112));
 			elseif mStages == 7 then
-				self:addy(-100 + ((mStages - i) * 8));
+				self:addy(-208 + ((mStages - i) * 112));
 			else
-				self:addy(((mStages - i) * 68));
+				self:addy(((mStages - i) * 112));
 			end;
 		end;
 		OffCommand=function(self)
@@ -289,61 +204,57 @@ for pn in ivalues(PlayerNumber) do
 		end;
 
 		-- Label
-		LoadActor( "label_under" ) .. {
-			InitCommand=cmd(horizalign,right);
+		LoadActor( "total" ) .. {
 			OnCommand=function(self)
 				if pn == PLAYER_1 then
 					self:x(-SCREEN_WIDTH);
 					self:sleep(0.05+(i-mStages)*-0.1);
 					self:linear(0.4);
-					self:x(-230);
-					self:y(10);
-					self:zoomy(1.37);
+					self:x(-346);
+					self:y(12)
+					self:zoomy(1)
 				else
 					self:rotationy(180);
 					self:x(SCREEN_WIDTH);
 					self:sleep(0.05+(i-mStages)*-0.1);
 					self:linear(0.4);
-					self:x(230);
-					self:y(10);
-					self:zoomy(1.37);
+					self:x(346);
+					self:y(12)
+					self:zoomy(1)
 				end
 			end;
 		};
 
 		-- difficulty
-		LoadActor("label_color") .. {
-			InitCommand=cmd(horizalign,right);
+		Def.Quad{
+			InitCommand=cmd(setsize,10,56);
 			BeginCommand=function(self)
-				local p1ssstats = sStats:GetPlayerStageStats(pn);
-				local p1ssstep = p1ssstats:GetPlayedSteps()[1]:GetDifficulty();
-				local p1statediff = DifficultyToFrame[p1ssstep];
+				local sStats = STATSMAN:GetPlayedStageStats(i);
+				local pss = sStats:GetPlayerStageStats(pn);
+				local diff = pss:GetPlayedSteps()[1]:GetDifficulty();
 				if sStats then
-					self:diffuse(p1statediff);
+					self:diffuse(CustomDifficultyToColor(diff));
 					self:visible(true);
 				else
 					self:visible(false);
 				end
-				self:x(-146);
 			end;
 			OnCommand=function(self)
 				if pn == PLAYER_1 then
 					self:x(-SCREEN_WIDTH);
 					self:sleep(0.05+(i-mStages)*-0.1);
 					self:linear(0.4);
-					self:x(-220);
-					self:y(10);
-					self:zoomy(1.37);
-					self:zoomx(1.4);
+					self:x(-223);
+					self:y(9);
+					self:zoom(1)
 				else
 					self:rotationy(180);
 					self:x(SCREEN_WIDTH);
 					self:sleep(0.05+(i-mStages)*-0.1);
 					self:linear(0.4);
-					self:x(220);
-					self:y(10);
-					self:zoomy(1.37);
-					self:zoomx(1.4);
+					self:x(223);
+					self:y(9);
+					self:zoom(1)
 				end
 			end;
 		};
@@ -352,12 +263,8 @@ for pn in ivalues(PlayerNumber) do
 		LoadActor("FullCombo") .. {
 			InitCommand=cmd();
 			BeginCommand=function(self)
-				if pn == PLAYER_1 then
-					self:x(-250);
-				else
-					self:x(250);
-				end
-				self:y(-5);
+				self:x(pn=="PlayerNumber_P2" and 500 or -500)
+				self:y(30);
 				local grade = pStageStats:GetGrade();
 				if grade ~= "Grade_Tier08" then
 					if pStageStats:FullComboOfScore('TapNoteScore_W1') or pStageStats:FullComboOfScore('TapNoteScore_W2') or pStageStats:FullComboOfScore('TapNoteScore_W3') or pStageStats:FullComboOfScore('TapNoteScore_W4') then
@@ -374,47 +281,51 @@ for pn in ivalues(PlayerNumber) do
 				self:zoom(0);
 				self:sleep(0.45+(i-mStages)*-0.1);
 				self:linear(0.4);
-				self:zoom(0.26);
+				self:zoom(0.3);
 			end;
 		};
 
 		-- grade
 		Def.Sprite {
-			InitCommand=cmd(zoom,0.2;diffuseshift;effectcolor1,1,1,1,1;effectcolor2,1,1,1,0.8;effectperiod,0.2;y,35);
+			InitCommand=cmd(diffuseshift;effectcolor1,1,1,1,1;effectcolor2,1,1,1,0.8;effectperiod,0.2);
 			BeginCommand=function(self)
 				local Grade = pStageStats:GetGrade();
-				self:LoadBackground(THEME:GetPathG("GradeDisplayEval",ToEnumShortString(Grade)));
+				self:Load(THEME:GetPathB("ScreenEvaluation Decorations/grade/GradeDisplayEval",ToEnumShortString(Grade)));
 				if pn == PLAYER_1 then
-					self:addx(-265);
-
+					if pStageStats:FullComboOfScore('TapNoteScore_W1') or pStageStats:FullComboOfScore('TapNoteScore_W2') or pStageStats:FullComboOfScore('TapNoteScore_W3') or pStageStats:FullComboOfScore('TapNoteScore_W4') then
+						self:addx(-300);
+					else
+						self:addx(-270);
+					end;
 				else
-					self:addx(265);
-
+					if pStageStats:FullComboOfScore('TapNoteScore_W1') or pStageStats:FullComboOfScore('TapNoteScore_W2') or pStageStats:FullComboOfScore('TapNoteScore_W3') or pStageStats:FullComboOfScore('TapNoteScore_W4') then
+						self:addx(300);
+					else
+						self:addx(270);
+					end;
 				end
+				self:zoomx(0.4)
+				self:y(10)
 			end;
 			OnCommand=function(self)
 				self:zoomy(0);
 				self:sleep(0.45+(i-mStages)*-0.1);
 				self:linear(0.4);
-				self:zoomy(0.2);
-
+				self:zoomy(0.4);
 			end;
 		};
 
 		-- stage
-		LoadFont("Common Normal")..{
-			InitCommand=cmd(zoom,0.7;diffuse,color("#ffffff");strokecolor,color("#000000");maxwidth,190);
+		LoadFont("_helvetica Bold 24px")..{
+			InitCommand=cmd(maxwidth,190;zoom,0.7;diffuse,Color.Black);
 			BeginCommand=function(self)
 				local pStage = sStats:GetStage();
 				local stageText = StageToLocalizedString(pStage).." STAGE"
 				if pn == PLAYER_1 then
-					self:addx(-203);
-					self:horizalign(right);
+					self:halign(1)
 				else
-					self:addx(203);
-					self:horizalign(left);
+					self:halign(0)
 				end
-				self:addy(-8);
 				self:settext(stageText);
 			end;
 			OnCommand=function(self)
@@ -422,22 +333,22 @@ for pn in ivalues(PlayerNumber) do
 					self:x(-SCREEN_WIDTH);
 					self:sleep(0.05+(i-mStages)*-0.1);
 					self:linear(0.4);
-					self:x(-310);
-					self:y(0);
+					self:x(-300);
+					self:y(-2);
 				else
 					self:x(SCREEN_WIDTH);
 					self:sleep(0.05+(i-mStages)*-0.1);
 					self:linear(0.4);
-					self:x(310);
-					self:y(0);
+					self:x(300);
+					self:y(-2);
 				end
 			end;
 		};
 
 		-- Score
 		Def.RollingNumbers {
-			File=THEME:GetPathF("Common","Normal");
-			InitCommand=cmd(Load,"RollingNumbersScore";zoom,0.8;diffusealpha,0;diffuse,color("#ffffff");strokecolor,color("#000000"));
+			File=THEME:GetPathF("","_helvetica Bold 24px");
+			InitCommand=cmd(zoomx,1.1;zoomy,0.9;Load,"RollingNumbersSumm";diffusealpha,0;diffuse,color("#ffffff");strokecolor,color("#000000"));
 			BeginCommand=function(self)
 				local sStats = STATSMAN:GetPlayedStageStats(i);
 				local pss = sStats:GetPlayerStageStats(pn)
@@ -448,32 +359,66 @@ for pn in ivalues(PlayerNumber) do
 				local maxsteps = math.max(radar:GetValue('RadarCategory_TapsAndHolds')+radar:GetValue('RadarCategory_Holds')+radar:GetValue('RadarCategory_Rolls'),1);
 				self:targetnumber(GetEvaScore(maxsteps,pss,pn));
 				if pn == PLAYER_1 then
-					self:horizalign(right);
-					self:x(-204);
+					self:halign(1)
 				else
-					self:horizalign(left);
-					self:x(204);
+					self:halign(0);
 				end
-				self:y(8);
+				self:y(20);
 			end;
 			OnCommand=function(self)
 				if pn == PLAYER_1 then
 					self:x(-SCREEN_WIDTH);
 					self:sleep(0.05+(i-mStages)*-0.1);
 					self:linear(0.4);
-					self:x(-310);
-					self:y(20);
+					self:x(-304);
 				else
 					self:x(SCREEN_WIDTH);
 					self:sleep(0.05+(i-mStages)*-0.1);
 					self:linear(0.4);
-					self:x(310);
-					self:y(20);
+					self:x(304);
 				end
 			end;
 		};
 	};
 	end;
 end;
+
+for _, pn in pairs(GAMESTATE:GetEnabledPlayers()) do
+	t[#t+1] = Def.ActorFrame{
+		InitCommand=cmd(y,_screen.cy-124);
+    Def.Sprite{
+      Texture="Player 1x2";
+      InitCommand=function(self)
+				self:pause()
+        self:setstate(pn=="PlayerNumber_P2" and 1 or 0)
+				self:zoomy(0)
+      end;
+			OnCommand=function(self)
+	      self:x(pn=="PlayerNumber_P2" and _screen.cx+326 or _screen.cx-326)
+	      self:sleep(0.3):linear(0.2):zoomy(1)
+	    end;
+	    OffCommand=function(self)
+	      self:linear(0.2):zoomy(0)
+	    end;
+    };
+		Def.Sprite{
+      InitCommand=function(self)
+				self:y(-6)
+        if pn == PLAYER_1 then
+					self:Load(THEME:GetPathG("","_sharedX2/P1 BADGE"))
+				else
+					self:Load(THEME:GetPathG("","_sharedX2/P2 BADGE"))
+				end;
+      end;
+			OnCommand=function(self)
+	      self:x(pn=="PlayerNumber_P2" and _screen.cx+326 or _screen.cx-424)
+				self:diffusealpha(0):rotationz(pn=="PlayerNumber_P2" and -90 or 90):sleep(0.3):linear(0.2):rotationz(0):diffusealpha(1)
+	    end;
+	    OffCommand=function(self)
+	      self:linear(0.2):rotationz(pn=="PlayerNumber_P2" and -90 or 90):diffusealpha(0)
+	    end;
+		};
+  };
+end
 
 return t

@@ -89,7 +89,7 @@ t[#t+1] = LoadActor("Frame")..{
   InitCommand=cmd(player,PLAYER_1;halign,0;x,SCREEN_LEFT;draworder,100);
   OnCommand=function(self)
     if GAMESTATE:PlayerIsUsingModifier(PLAYER_1,'reverse') then
-      self:y(SCREEN_CENTER_Y-301.5);
+      self:y(SCREEN_CENTER_Y-294);
       self:rotationx(180);
     else
       self:y(SCREEN_CENTER_Y+275);
@@ -98,13 +98,13 @@ t[#t+1] = LoadActor("Frame")..{
 };
 
 t[#t+1] = LoadActor("Frame")..{
-  InitCommand=cmd(player,PLAYER_2;halign,0;x,SCREEN_RIGHT;zoomx,-1);
+  InitCommand=cmd(player,PLAYER_2;halign,0;x,SCREEN_RIGHT;zoomx,-1;draworder,100);
   OnCommand=function(self)
     if GAMESTATE:PlayerIsUsingModifier(PLAYER_2,'reverse') then
-      self:y(SCREEN_CENTER_Y-301.5);
+      self:y(SCREEN_CENTER_Y-294);
       self:rotationx(180);
     else
-      self:y(SCREEN_CENTER_Y+275);
+      self:y(SCREEN_CENTER_Y+252);
     end;
   end;
 };

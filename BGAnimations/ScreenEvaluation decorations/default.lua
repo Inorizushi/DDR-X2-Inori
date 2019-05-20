@@ -212,11 +212,9 @@ t[#t+1] = Def.ActorFrame {
 		OnCommand=cmd(play);
 	};
 };
-t[#t+1] = LoadActor("grade")..{
-	InitCommand=cmd(diffusealpha,1;addy,-80;draworder,0;);
-	OffCommand=cmd(sleep,0.2;linear,0.2;diffusealpha,0);
-};
-
+for _, pn in pairs(GAMESTATE:GetEnabledPlayers()) do
+	t[#t+1] = LoadActor("grade", pn)
+end
 --StatsP1--
 t[#t+1] = LoadActor("statsP1")..{
 	InitCommand=cmd(visible,GAMESTATE:IsHumanPlayer(PLAYER_1);addy,0;zoom,1;x,SCREEN_CENTER_X-100;diffusealpha,0);
@@ -228,7 +226,7 @@ t[#t+1] = LoadActor("statsP1")..{
 	};
 --StatsP2--
 t[#t+1] = LoadActor("statsP2")..{
-	InitCommand=cmd(visible,GAMESTATE:IsHumanPlayer(PLAYER_2);addy,0;zoom,1;x,SCREEN_CENTER_X+100;diffusealpha,0);
+	InitCommand=cmd(visible,GAMESTATE:IsHumanPlayer(PLAYER_2);addy,0;zoom,1;x,SCREEN_CENTER_X+175;diffusealpha,0);
 	OffCommand=cmd(sleep,0.0;linear,0.2;diffusealpha,0);
 	OnCommand=function(self)
 		self:sleep(0.7)

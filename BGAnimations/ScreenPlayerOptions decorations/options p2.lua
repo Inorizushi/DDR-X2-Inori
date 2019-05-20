@@ -28,6 +28,7 @@ local rowtoind = {
 	["FILTER"] = 14,
 	["RISKY"] = 13,
 	["CHARACTERS"] = 11,
+	["Exit"] = 11,
 }
 
 local rownames = {
@@ -144,7 +145,11 @@ local function MakeRow(rownames, idx)
 							self:diffuse(color(diffcolor[choice]))
 						end;
 					elseif DisplayName == "CHARACTERS" then
-						self:settext(choiceList2[choice])
+						if choice == 0 then
+							self:settext(THEME:GetString('OptionNames','Off'))
+						else
+							self:settext(Characters.GetAllCharacterNames()[choice])
+						end;
 						if CurrentRowName == name then
 							self:diffuse(color("#FFFFFF"))
 						end;
@@ -207,13 +212,13 @@ local function MakeRow(rownames, idx)
 			GainFocusCommand=function(self)
 				self:finishtweening()
 				self:diffuseshift():diffusealpha(1):effectcolor1(color("1,1,1,1")):effectcolor2(color("0.5,0.5,0.5,1")):effectperiod(1)
-				self:playcommand("Set")
+				self:queuecommand("Set")
 			end;
 			LoseFocusCommand=function(self)
 				self:finishtweening()
 				self:stopeffect()
 				self:diffusealpha(0)
-				self:playcommand("Set")
+				self:queuecommand("Set")
 			end;
 		};
 	};
@@ -250,7 +255,7 @@ t[#t+1] = Def.ActorFrame{
 			elseif param.Input == "Down" and param.Player == PLAYER_2 then
 				if curIndex < #RowList then
 					curIndex = curIndex + 1
-				elseif curIndex <= 15 then
+				elseif curIndex >= 15 then
 					curIndex = 1
 				end
 			end
