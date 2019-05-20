@@ -13,8 +13,14 @@ t[#t+1] = Def.ActorFrame{
       end;
       On2Command=cmd(diffusealpha,0;zoomy,0;sleep,0.5;smooth,0.2;zoomy,1;diffusealpha,1);
       OffCommand=cmd(smooth,0.2;zoomy,0;diffusealpha,0);
-      GainFocusCommand=cmd(finishtweening;diffusealpha,0;zoomy,0;smooth,0.2;zoomy,1;diffusealpha,1);
-      LoseFocusCommand=cmd(finishtweening;queuecommand,"Off");
+      GainFocusCommand=function(self)
+        setenv("SelVers",1)
+        self:finishtweening():diffusealpha(0):zoomy(0):sleep(0.2):smooth(0.1):zoomy(1.5):diffusealpha(1):smooth(0.05):zoomy(1)
+      end;
+      LoseFocusCommand=function(self)
+        setenv("SelVers",0)
+        self:finishtweening():queuecommand("Off")
+      end;
     };
     LoadActor("text")..{
       InitCommand=cmd(x,-76;y,-22);
@@ -56,7 +62,7 @@ t[#t+1] = Def.ActorFrame{
     end;
     On2Command=cmd(diffusealpha,0;y,0;sleep,0.5;smooth,0.2;y,-94;diffusealpha,1);
     OffCommand=cmd(smooth,0.2;y,0;diffusealpha,0);
-    GainFocusCommand=cmd(finishtweening;diffusealpha,0;y,0;smooth,0.2;y,-94;diffusealpha,1);
+    GainFocusCommand=cmd(finishtweening;diffusealpha,0;y,0;sleep,0.1;smooth,0.2;y,-100;diffusealpha,1;smooth,0.05;y,-94);
     LoseFocusCommand=cmd(finishtweening;queuecommand,"Off");
     LoadActor(THEME:GetPathG("","_sharedX2/SelectStyle/infotop"));
     LoadActor("title")..{
@@ -74,7 +80,7 @@ t[#t+1] = Def.ActorFrame{
     end;
     On2Command=cmd(diffusealpha,0;y,0;sleep,0.5;smooth,0.2;y,86;diffusealpha,1);
     OffCommand=cmd(smooth,0.2;y,0;diffusealpha,0);
-    GainFocusCommand=cmd(finishtweening;diffusealpha,0;y,0;smooth,0.2;y,86;diffusealpha,1);
+    GainFocusCommand=cmd(finishtweening;diffusealpha,0;y,0;sleep,0.1;smooth,0.2;y,100;diffusealpha,1;smooth,0.05;y,86);
     LoseFocusCommand=cmd(finishtweening;queuecommand,"Off");
   };
 };

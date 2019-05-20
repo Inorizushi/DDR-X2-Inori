@@ -105,38 +105,8 @@ t[#t+1] = LoadActor("X2DifficultyList.lua");
 -------------------------------------------------------------------------------------------------------------------
 -- Groove Radars
 -------------------------------------------------------------------------------------------------------------------
-t[#t+1] = Def.ActorFrame{
-	Name = "Player 1";
-	OffCommand=cmd(stoptweening;sleep,0.25;linear,0.1;diffusealpha,0);
-	CurrentSongChangedMessageCommand=function(self)
-		local Song=GAMESTATE:GetCurrentSong()
-			if not Song then
-				self:diffusealpha(0)
-			else
-				self:diffusealpha(0.75)
-			end;
-		end;
-	create_ddr_groove_radar("P1_radar", SCREEN_CENTER_X-326, SCREEN_CENTER_Y+172,
-		PLAYER_1, 74, color("1,1,1,0.25"),
-		{ColorGR.PLAYER_1, ColorGR.PLAYER_1, ColorGR.PLAYER_1, ColorGR.PLAYER_1, ColorGR.PLAYER_1},
-		"accelerate", .1)
-};
-t[#t+1] = Def.ActorFrame{
-	Name = "Player 2";
-	OffCommand=cmd(stoptweening;sleep,0.25;linear,0.1;diffusealpha,0);
-	CurrentSongChangedMessageCommand=function(self)
-		local Song=GAMESTATE:GetCurrentSong()
-			if not Song then
-				self:diffusealpha(0)
-			else
-				self:diffusealpha(0.75)
-			end;
-		end;
-	create_ddr_groove_radar("P2_radar", SCREEN_CENTER_X-326, SCREEN_CENTER_Y+172,
-		PLAYER_2, 74, color("1,1,1,0.25"),
-		{ColorGR.PLAYER_2, ColorGR.PLAYER_2, ColorGR.PLAYER_2, ColorGR.PLAYER_2, ColorGR.PLAYER_2},
-		"accelerate", .1)
-};
+t[#t+1] = StandardDecorationFromFileOptional( "GrooveRadarP1_Default", "GrooveRadarP1_Default" );
+t[#t+1] = StandardDecorationFromFileOptional( "GrooveRadarP2_Default", "GrooveRadarP2_Default" );
 
 -- song options text (e.g. 1.5xmusic)
 t[#t+1] = StandardDecorationFromFileOptional("SongOptions","SongOptions")

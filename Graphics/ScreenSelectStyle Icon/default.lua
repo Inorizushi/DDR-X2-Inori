@@ -18,6 +18,8 @@ end
 t[#t+1] = Def.ActorFrame {
     LoadActor( gc:GetName() ) .. {
 	OnCommand=cmd();
+	GainFocusCommand=cmd(diffusealpha,0;sleep,0.1;linear,0.1;diffusealpha,1);
+	LoseFocusCommand=cmd(linear,0.1;diffusealpha,0);
 	};
 };
 

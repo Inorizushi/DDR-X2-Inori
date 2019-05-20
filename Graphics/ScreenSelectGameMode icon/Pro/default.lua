@@ -1,35 +1,34 @@
 local t = Def.ActorFrame{};
 
-t[#t+1] = Def.ActorFrame{
-	OnCommand=cmd(addx,-SCREEN_WIDTH*2.5;sleep,0.5;smooth,0.3;addx,SCREEN_WIDTH*2.5);
-	OffCommand=cmd(sleep,0.116;linear,0.066;zoomy,0;zoomx,5;diffusealpha,0);
+t[#t+1] = LoadActor("reflec")..{
+	InitCommand=cmd(xy,19,214;valign,0;diffusealpha,0.75);
+	OnCommand=cmd(finishtweening;addx,-SCREEN_WIDTH*2.5;sleep,0.5;smooth,0.3;addx,SCREEN_WIDTH*2.5);
+	OffCommand=cmd(sleep,0.116;diffusealpha,0);
+};
 
+t[#t+1] = Def.ActorFrame{
+	OnCommand=cmd(finishtweening;addx,-SCREEN_WIDTH*2.5;sleep,0.5;smooth,0.3;addx,SCREEN_WIDTH*2.5);
+	OffCommand=cmd(sleep,0.116;linear,0.066;zoomy,0;zoomx,2;diffusealpha,0);
 	-- Information panel
 	Def.Sprite{
 		InitCommand=cmd(addy,-32;addx,32);
 		OnCommand=cmd(addy,10);
-		GainFocusCommand=function(s) s:stoptweening():linear(0.2):addy(-10):zoom(1):Load(THEME:GetPathG("ScreenSelectGameMode","icon/Pro/char.png")) end;
-		LoseFocusCommand=function(s) s:stoptweening():linear(0.2):addy(10):zoom(0.75):Load(THEME:GetPathG("ScreenSelectGameMode","icon/Pro/char dark.png")) end;
+		GainFocusCommand=function(s) s:Load(THEME:GetPathG("ScreenSelectGameMode","icon/Pro/char.png")) end;
+		LoseFocusCommand=function(s) s:Load(THEME:GetPathG("ScreenSelectGameMode","icon/Pro/char dark.png")) end;
 	};
 	Def.ActorFrame{
-		GainFocusCommand=cmd(stoptweening;linear,0.2;zoom,1;visible,true);
-		LoseFocusCommand=cmd(stoptweening;linear,0.2;zoom,0.75;visible,false);
-		LoadActor(THEME:GetPathG("","_sharedX2/PlayMode/base"))..{
+		Def.Sprite{
 			InitCommand=cmd(addy,181;addx,19);
+			GainFocusCommand=function(s) s:Load(THEME:GetPathG("","_sharedX2/PlayMode/base")) end;
+			LoseFocusCommand=function(s) s:Load(THEME:GetPathG("ScreenSelectGameMode","icon/Pro/unfocused base.png")) end;
 		};
-		--LoadActor("text/default.lua");
-	};
-	Def.ActorFrame{
-		GainFocusCommand=cmd(stoptweening;linear,0.2;zoom,1;visible,false);
-		LoseFocusCommand=cmd(stoptweening;linear,0.2;zoom,0.75;visible,true);
-		LoadActor("unfocused base")..{
-			InitCommand=cmd(addy,186;addx,20;);
+		LoadActor("text/default.lua")..{
+			GainFocusCommand=cmd(visible,true);
+			LoseFocusCommand=cmd(visible,false);
 		};
 	};
 	Def.ActorFrame{
-		InitCommand=cmd(addx,-160;addy,150;visible,false);
-		GainFocusCommand=cmd(visible,true);
-		LoseFocusCommand=cmd(visible,false);
+		InitCommand=cmd(addx,-160;addy,150);
 		Def.Sprite{
 			Texture = "icon 1x2";
 			InitCommand=cmd(setstate,1;pause;);
@@ -38,47 +37,39 @@ t[#t+1] = Def.ActorFrame{
 		};
 		Def.Sprite{
 			Texture = "icon 1x2";
-			InitCommand=cmd(setstate,0;pause;blend,Blend.Add);
-			OnCommand=cmd(queuecommand,"Anim");
+			InitCommand=cmd(setstate,0;pause;blend,Blend.Add;diffusealpha,0);
 			GainFocusCommand=cmd(finishtweening;queuecommand,"Anim");
 			AnimCommand=cmd(rotationz,0;zoom,1;sleep,0.8;diffusealpha,0.5;linear,0.2;rotationz,360;linear,0.2;zoom,1.5;linear,0.2;diffusealpha,0;sleep,1.4;queuecommand,"Anim");
 			LoseFocusCommand=cmd(stopeffect;finishtweening);
 		};
 	};
-	Def.Sprite{
-		Texture = "icon 1x2";
-		InitCommand=cmd(setstate,1;pause;addx,-146;addy,90;visible,true);
-		GainFocusCommand=cmd(stoptweening;linear,0.2;zoom,1;visible,false);
-		LoseFocusCommand=cmd(stoptweening;linear,0.2;zoom,0.75;visible,true);
+	Def.ActorFrame{
+		LoadActor("letters unfocused")..{
+			InitCommand=cmd(xy,-164,72);
+			GainFocusCommand=cmd(visible,false);
+			LoseFocusCommand=cmd(visible,true);
+		};
 	};
 	Def.ActorFrame{
 		InitCommand=cmd(x,-164;y,60);
-		GainFocusCommand=cmd(stoptweening;linear,0.2;zoom,1;visible,true);
-		LoseFocusCommand=cmd(stoptweening;linear,0.2;zoom,0.75;visible,false);
+		GainFocusCommand=cmd(finishtweening;queuecommand,"Anim";visible,true);
+		LoseFocusCommand=cmd(visible,false);
+		AnimCommand=cmd(sleep,2.8;queuecommand,"Anim");
 		LoadActor("P.png")..{
-			InitCommand=cmd(x,-54;y,20);
-			GainFocusCommand=cmd(queuecommand,"Anim");
-			AnimCommand=cmd(sleep,0.5;linear,0.2;addy,-40;zoomx,1.3;zoomy,0.5;linear,0.2;addy,40;zoomy,1;zoomx,1;sleep,0.4;sleep,1.5;queuecommand,"Anim");
+			InitCommand=cmd(x,-50;y,16);
+			AnimCommand=cmd(sleep,0.5;linear,0.1;addy,-40;zoomy,0.75;sleep,0.05;linear,0.1;addy,40;linear,0.05;zoomy,1);
 			LoseFocusCommand=cmd(stopeffect;finishtweening);
 		};
 		LoadActor("R.png")..{
-			InitCommand=cmd(x,3;y,2);
-			GainFocusCommand=cmd(queuecommand,"Anim");
-			AnimCommand=cmd(sleep,0.55;linear,0.2;addy,-40;zoomx,1.3;zoomy,0.5;linear,0.2;addy,40;zoomy,1;zoomx,1;sleep,0.4;sleep,1.45;queuecommand,"Anim");
+			InitCommand=cmd(y,2);
+			AnimCommand=cmd(sleep,0.55;linear,0.1;addy,-40;;zoomy,0.75;sleep,0.05;linear,0.1;addy,40;linear,0.05;zoomy,1);
 			LoseFocusCommand=cmd(stopeffect;finishtweening);
 		};
 		LoadActor("O.png")..{
-			InitCommand=cmd(x,60;y,14);
-			GainFocusCommand=cmd(queuecommand,"Anim");
-			AnimCommand=cmd(sleep,0.6;linear,0.2;addy,-40;zoomx,1.3;zoomy,0.5;linear,0.2;addy,40;zoomy,1;zoomx,1;sleep,0.4;sleep,1.4;queuecommand,"Anim");
+			InitCommand=cmd(x,50;y,10);
+			AnimCommand=cmd(sleep,0.6;linear,0.1;addy,-40;zoomy,0.75;sleep,0.05;linear,0.1;addy,40;linear,0.05;zoomy,1);
 			LoseFocusCommand=cmd(stopeffect;finishtweening);
 		};
-	};
-	Def.ActorFrame{
-		InitCommand=cmd(x,-146;y,48);
-		GainFocusCommand=cmd(stoptweening;linear,0.2;zoom,1;visible,false);
-		LoseFocusCommand=cmd(stoptweening;linear,0.2;zoom,0.75;visible,true);
-		LoadActor("letters unfocused");
 	};
 	Def.ActorFrame{
 		InitCommand=cmd(;x,-310;y,190);

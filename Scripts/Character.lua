@@ -228,6 +228,7 @@ end
 
 function OptionRowCharacters()
     local choiceList = c.GetAllCharacterNames()
+		choiceList2 = c.GetAllCharacterNames()
     local choiceListReverse = {}
     for index, name in pairs(choiceList) do
         choiceListReverse[name] = index

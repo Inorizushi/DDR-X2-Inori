@@ -45,7 +45,7 @@ local t = Def.ActorFrame {
 	InitCommand=cmd(Center),
 
 	Def.GrooveRadar {
-		OnCommand=cmd(zoom,0;sleep,7;sleep,0.583;decelerate,0.150;zoom,0.25),
+		OnCommand=cmd(zoom,0;sleep,0.5;sleep,0.583;decelerate,0.150;zoom,0.25),
 		OffCommand=cmd(sleep,0.00;decelerate,0.167;zoom,0),
 		StorageDevicesChangedMessageCommand=function(self, params)
 			self:queuecommand('UpdateInternal2');
@@ -68,7 +68,7 @@ local t = Def.ActorFrame {
 		end;
 
 		OnCommand=function(self, params)
-			(cmd(zoom,0;sleep,7;sleep,0.583;decelerate,0.150;zoom,0.25))(self);
+			(cmd(zoom,0;sleep,0.5;sleep,0.583;decelerate,0.150;zoom,0.25))(self);
 			self:queuecommand('UpdateInternal2');
 		end;
 

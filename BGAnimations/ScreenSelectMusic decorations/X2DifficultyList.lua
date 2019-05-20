@@ -131,17 +131,17 @@ local function IndicatorUpdate(self, pn)
     local currentlyVisible = self:GetVisible()
     local steps = GetCurrentSteps(pn)
     if steps and GAMESTATE:GetCurrentSong() then
-        if currentlyVisible then
-            self:linear(0.1)
-        end
-        local yPos = DiffToYPos(steps:GetDifficulty())
-        if yPos then
-            self:visible(true)
-            self:y(yPos)
-            return
-        end
-    end
-    self:visible(false)
+			if currentlyVisible then
+					self:linear(0.1)
+			end
+      local yPos = DiffToYPos(steps:GetDifficulty())
+      if yPos then
+          self:visible(true)
+          self:y(yPos)
+          return
+      end
+  end
+  self:visible(false)
 end
 
 
@@ -165,14 +165,41 @@ do
 							return IndicatorUpdate(self, pn)
 						end
         })
+				table.insert(indicatorBackgrounds, LoadActor(PlayerBGName(pn))..{
+            Name='Background'..ToEnumShortString(pn),
+						InitCommand=function(self)
+							self:draworder(1)
+							self:visible(false)
+							if GAMESTATE:GetNumPlayersEnabled() == 2 then
+								if pn==PLAYER_1 then
+									self:cropright(0.5)
+								else
+									self:cropleft(0.5)
+								end;
+							end;
+						end;
+						OnCommand=cmd(diffusealpha,0;sleep,1.25;diffusealpha,1);
+            SNDLUpdateMessageCommand=function(self)
+							return IndicatorUpdate(self, pn)
+						end
+        })
         table.insert(indicatorLabels, LoadActor(PlayerLabelName(pn))..{
             Name='PlayerLabel',
-            InitCommand=function(self) SetXFromPlayerNumber(self:visible(false), pn) self:zoom(0) end,
+            InitCommand=function(self) SetXFromPlayerNumber(self:visible(false), pn) self:zoom(0):draworder(2)
+							if pn==PLAYER_2 then
+								self:addx(10)
+							end;
+						end,
 						OnCommand=function(self) self:zoom(0):sleep(1.25):linear(0.2):zoom(1):queuecommand("Animate") end,
-						OffCommand=cmd(sleep,0.8;linear,0.2;zoom,0);
-						AnimateCommand=function(self) self:bounce():effectmagnitude(pn=='PlayerNumber_P2' and -4 or 4,0,0):effectperiod(1) end,
+						AnimateCommand=function(self) self:bounce():effectperiod(0.5)
+							if pn==PLAYER_1 then
+								self:effectmagnitude(4,0,0)
+							else
+								self:effectmagnitude(-4,0,0)
+							end;
+						end,
             SNDLUpdateMessageCommand=function(self) return IndicatorUpdate(self, pn) end,
-            PlayerJoinedMessageCommand=function(self,p)
+						PlayerJoinedMessageCommand=function(self,p)
                 if p.Player==pn then self:Load(ResolveRelativePath(PlayerLabelName(pn),1)) end
             end
         })
@@ -187,7 +214,7 @@ for idx, diff in pairs(difficultiesToDraw) do
 		OnCommand=cmd(diffusealpha,0;sleep,0.3;diffusealpha,1);
 		Name = "Row"..diff,
 		SNDLUpdateMessageCommand = function(self) for _, item in pairs(self:GetChildren()) do item:playcommand("Update") end end,
-		InitCommand=function(self) self:y(DiffToYPos(diff) ) end,
+		InitCommand=function(self) self:y(DiffToYPos(diff) ) self:draworder(2) end,
 		Def.Sprite{
 			Name = "Label",
 			Texture = "Steps Dark 1x5.png",
@@ -218,7 +245,7 @@ for idx, diff in pairs(difficultiesToDraw) do
 		Def.Sprite{
 			Name = "Foot";
 			Texture = "StepTicks Dark 1x5.png",
-			InitCommand = function(self) self:x(tickPos-25):setstate(idx-1):SetAllStateDelays(math.huge) end,
+			InitCommand = function(self) self:x(tickPos-25):setstate(idx-1):SetAllStateDelays(math.huge) self:draworder(2) end,
 			SNDLUpdateMessageCommand=function(self)
 				local song = GAMESTATE:GetCurrentSong()
 				if song then
@@ -244,7 +271,7 @@ for idx, diff in pairs(difficultiesToDraw) do
 		},
 		Def.RollingNumbers {
 			Font="ScreenSelectMusic difficulty.ini";
-			InitCommand=function(self) self:x(tickPos+2):Load("RollingNumbersMeter"):diffuse{0.5,0.5,0.5,1} end,
+			InitCommand=function(self) self:x(tickPos+2):Load("RollingNumbersMeter"):diffuse{0.5,0.5,0.5,1} self:draworder(2) end,
 			SNDLUpdateMessageCommand=function(self, params)
 				local song = GAMESTATE:GetCurrentSong()
 				if song then
@@ -276,6 +303,7 @@ for idx, diff in pairs(difficultiesToDraw) do
 		Font = "_helveticaneuelt pro 65 md 20px";
 			InitCommand=function(self)
 				SetXFromPlayerNumberScore(self:visible(false), pn) self:Load("RollingNumbersSongData"):visible(false):strokecolor(color("0,0,0,1"))
+				self:draworder(2)
 			end;
 			OffCommand=cmd(sleep,0.5;linear,0.2;diffusealpha,0);
 			SNDLUpdateMessageCommand=function(self, params)
@@ -323,7 +351,7 @@ for idx, diff in pairs(difficultiesToDraw) do
 		};
 		--Grade
 		Def.Quad{
-			InitCommand=function(self) SetXFromPlayerNumberScore(self:visible(false), pn) self:visible(false):addx(pn=='PlayerNumber_P2' and -72 or 72):zoom(0.3) end,
+			InitCommand=function(self) SetXFromPlayerNumberScore(self:visible(false), pn) self:visible(false):addx(pn=='PlayerNumber_P2' and -72 or 72):zoom(0.3) self:draworder(2) end,
 			SNDLUpdateMessageCommand=function(self, params)
 				local song = GAMESTATE:GetCurrentSong()
 				local st=GAMESTATE:GetCurrentStyle():GetStepsType()
@@ -372,7 +400,7 @@ for idx, diff in pairs(difficultiesToDraw) do
 		},
 		--FC Badge
 		LoadActor(THEME:GetPathG("myMusicWheel/Player","Badge FullCombo"))..{
-			InitCommand=function(self) SetXFromPlayerNumberScore(self:diffusealpha(0), pn) self:diffusealpha(0):addx(pn=='PlayerNumber_P2' and -80 or 80):addy(-8):zoom(0.25) end,
+			InitCommand=function(self) SetXFromPlayerNumberScore(self:diffusealpha(0), pn) self:diffusealpha(0):addx(pn=='PlayerNumber_P2' and -80 or 80):addy(-8):zoom(0.25) self:draworder(2) end,
 			SNDLUpdateMessageCommand=function(self, params)
 				local song = GAMESTATE:GetCurrentSong()
 				local st=GAMESTATE:GetCurrentStyle():GetStepsType()

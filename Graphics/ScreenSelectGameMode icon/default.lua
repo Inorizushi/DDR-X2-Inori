@@ -19,7 +19,7 @@ t[#t+1] = Def.ActorFrame {
     LoadActor(gc:GetName() ) .. {
 	OnCommand=cmd();
 	GainFocusCommand=cmd(stoptweening;decelerate,0.125;zoom,1;y,SCREEN_CENTER_Y-350);
-	LoseFocusCommand=cmd(stoptweening;decelerate,0.125;zoom,0.94;y,SCREEN_CENTER_Y-425);
+	LoseFocusCommand=cmd(stoptweening;decelerate,0.125;zoom,0.75;y,SCREEN_CENTER_Y-425);
 	};
 };
 
