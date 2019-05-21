@@ -3,7 +3,8 @@ This includes a few modules that all have to do with scoring and grading.
 SN2Scoring and OldScoring are independent modules.
 SN2Grading partially depends on SN2Scoring.
 All information used is from http://aaronin.jp/ddrssystem.html. The
-information used for SN2 was written by Aaron C.
+information used for SN2 was written by Aaron C., but the information
+for 2nd has no attributed author.
 ]]
 
 --SN2Scoring
@@ -19,18 +20,18 @@ ScoringInfo = {
 
 --The multiplier tables have to be filled in completely.
 --However, the deduction ones do not.
-local normalScoringRules =
+local normalScoringRules = 
 {
-    normal =
+    normal = 
     {
         multipliers =
         {
-          TapNoteScore_W1 = 1,
-          TapNoteScore_W2 = 1,
-          TapNoteScore_W3 = 0.5,
-          TapNoteScore_W4 = 0,
-          TapNoteScore_W5 = 0,
-          TapNoteScore_Miss = 0
+            TapNoteScore_W1 = 1,
+            TapNoteScore_W2 = 1,
+            TapNoteScore_W3 = 0.5,
+            TapNoteScore_W4 = 0,
+            TapNoteScore_W5 = 0,
+            TapNoteScore_Miss = 0
         },
         deductions =
         {
@@ -38,7 +39,7 @@ local normalScoringRules =
             TapNoteScore_W3 = 10
         }
     },
-    starter =
+    starter = 
     {
         multipliers =
         {
@@ -50,10 +51,10 @@ local normalScoringRules =
             TapNoteScore_Miss = 0
         },
         deductions = {}
-    }
+    }    
 }
 
-local maxQuasiMultipliers =
+local maxQuasiMultipliers = 
 {
     TapNoteScore_W1 = 1,
     TapNoteScore_W2 = 1,
@@ -62,6 +63,7 @@ local maxQuasiMultipliers =
     TapNoteScore_W5 = 1,
     TapNoteScore_Miss = 1
 }
+
 
 function GetEvaScore(maxsteps,pss,pn)
     local score;
@@ -84,7 +86,6 @@ end;
 --Given a thing which has functions hnsFuncName and tnsFuncName that take one
 --argument and return the number of TNSes or HNSes there are in that thing,
 --pack that information into something useful.
---This is a pretty bad function description, so just see how it's used.
 local function GetScoreDataFromThing(thing, tnsFuncName, hnsFuncName)
     local output = {}
     --how class function lookup works internally in Lua
@@ -109,7 +110,7 @@ function SN2Scoring.PrepareScoringInfo(starterRules)
         ScoringInfo.seed = stageSeed
         local inCourse = GAMESTATE:IsCourseMode()
         local maker = inCourse and SN2Scoring.MakeCourseScoringFunctions or SN2Scoring.MakeNormalScoringFunctions
-        --cool lua trick: GAMESTATE:GetCurrentTrail(pn) is equivalent to
+        --cool lua trick: GAMESTATE:GetCurrentTrail(pn) is equivalent to 
         --GameState.GetCurrentTrail(GAMESTATE,pn) so we can save the right
         --function to a variable and save... 3 lines of code or so...
         --oh well.
@@ -153,12 +154,12 @@ function SN2Scoring.ComputeNormalScoreFromData(data, max, scoringRuleSet)
         scoreCount = data[hns]
         maxFraction = maxFraction + (scoreCount * multiplier)
     end
-    return ((maxFraction/objectCount) * maxScore) - totalDeductions
+    return ((maxFraction/objectCount) * maxScore) - totalDeductions    
 end
 
 
 function SN2Scoring.GetSN2ScoreFromHighScore(steps, highScore)
-    local scoreData = GetScoreDataFromThing(highScore, "GetTapNoteScore",
+    local scoreData = GetScoreDataFromThing(highScore, "GetTapNoteScore", 
         "GetHoldNoteScore")
     local radar = steps:GetRadarValues(pn)
     scoreData.Total = radar:GetValue('RadarCategory_TapsAndHolds')+
@@ -232,7 +233,7 @@ function SN2Scoring.MakeCourseScoringFunctions(trailObject,pn)
             * multiplier
             + totalSDP
     end
-
+    
     local baseScore = 1000000
     local oldStageJudgments = {}
     local oldStageHoldJudgments = {}
@@ -240,7 +241,7 @@ function SN2Scoring.MakeCourseScoringFunctions(trailObject,pn)
     local lastMaxFractions = {real=0, max=0}
 
     local function ComputeScore(pss, stage, max)
-        local curStageJudgments =
+        local curStageJudgments = 
             { TapNoteScore_W1 = 0, TapNoteScore_W2 = 0, TapNoteScore_W3 = 0, TapNoteScore_W4 = 0, TapNoteScore_W5 = 0, TapNoteScore_Miss = 0}
         local curStageHoldJudgments = { HoldNoteScore_Held = 0, HoldNoteScore_LetGo = 0 }
         assert(#oldStageJudgments == #oldStageHoldJudgments, "Course ComputeScore: internal data inconsistency")
@@ -321,24 +322,24 @@ end
 SN2Grading = {}
 --Edit is technically the "highest difficulty"
 local grade_table = {
-  Difficulty_Edit = {
-      Grade_Tier01 = 990000, --AAA
-      Grade_Tier02 = 950000, --AA
-      Grade_Tier03 = 900000, --A
-      Grade_Tier04 = 800000, --B
-      Grade_Tier05 = 700000, --C
-      Grade_Tier06 = 0, --D
-  },
-  Difficulty_Medium = {
-      Grade_Tier03 = 850000,
-      Grade_Tier04 = 750000,
-      Grade_Tier05 = 600000
-  },
-  Difficulty_Easy = {
-      Grade_Tier03 = 800000,
-      Grade_Tier04 = 700000,
-      Grade_Tier05 = 500000
-  }
+    Difficulty_Edit = {
+        Grade_Tier01 = 990000, --AAA
+        Grade_Tier02 = 950000, --AA
+        Grade_Tier03 = 900000, --A
+        Grade_Tier04 = 800000, --B
+        Grade_Tier05 = 700000, --C
+        Grade_Tier06 = 0, --D
+    },
+    Difficulty_Medium = {
+        Grade_Tier03 = 850000,
+        Grade_Tier04 = 750000,
+        Grade_Tier05 = 600000
+    },
+    Difficulty_Easy = {
+        Grade_Tier03 = 800000,
+        Grade_Tier04 = 700000,
+        Grade_Tier05 = 500000
+    }
 }
 --i'm too lazy to fill this out in full, so this does it for me
 do
@@ -365,7 +366,6 @@ function SN2Grading.ScoreToGrade(score, difficulty)
     for grade, min_score in pairs(tiers) do
         if score >= min_score and min_score >= best then
             output = grade
-            best = min_score
         end
     end
     return output
@@ -377,9 +377,68 @@ function SN2Grading.GetSN2GradeFromHighScore(steps, highScore)
     return SN2Grading.ScoreToGrade(score, steps:GetDifficulty()), score
 end
 
+--OldScoring
+--Implements the scoring system used by DDR 1st-2ndMIX and derivatives thereof.
+
+--Do not ever EVER use this for "real" scores I swear to Jesus it's the worst system
+OldScoring = {}
+do
+    local MAX_SCORE = 999999999
+    local baseValues = {
+        TapNoteScore_W1 = 3,
+        TapNoteScore_W2 = 3,
+        TapNoteScore_W3 = 1,
+        TapNoteScore_W4 = 0,
+        TapNoteScore_W5 = 0,
+        TapNoteScore_Miss = 0
+    }
+    function OldScoring.MakeScoringFunctions()
+        local combo = 0
+        local score = 0
+        local output = {}
+        local valRecords = {}
+        for k, v in pairs(baseValues) do
+            valRecords[k] = 0
+        end
+
+        output.Update = function(pss)
+            if score >= MAX_SCORE then
+                score = MAX_SCORE
+                return
+            end
+            for tns, count in pairs(valRecords) do
+                local newCount = pss:GetTapNoteScores(tns)
+                if newCount > valRecords[tns] then
+                    if baseValues[tns] == 0 then
+                        combo = 0
+                    else
+                        for note=1, newCount - valRecords[tns] do
+                            combo = combo + 1
+                            score = score + (math.floor(combo/4)^2 + 1) * 100 
+                                * baseValues[tns]
+                            if score >= MAX_SCORE then
+                                score = MAX_SCORE
+                                return
+                            end
+                        end
+                    end
+                    valRecords[tns] = newCount
+                end
+            end
+        end
+
+        output.GetCurrentScore = function(exact)
+            if exact then return score end
+            return math.floor(score)
+        end
+
+        return output
+    end
+end
+
 -- (c) 2015-2017 John Walstrom, "Inorizushi"
 -- All rights reserved.
---
+-- 
 -- Permission is hereby granted, free of charge, to any person obtaining a
 -- copy of this software and associated documentation files (the
 -- "Software"), to deal in the Software without restriction, including
@@ -389,7 +448,7 @@ end
 -- copyright notice(s) and this permission notice appear in all copies of
 -- the Software and that both the above copyright notice(s) and this
 -- permission notice appear in supporting documentation.
---
+-- 
 -- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
 -- OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 -- MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT OF

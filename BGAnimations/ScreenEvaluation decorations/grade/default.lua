@@ -21,13 +21,13 @@ t[#t+1] = Def.ActorFrame{
 				if((staw =="StageAward_SingleDigitW4") or (staw =="StageAward_OneW4") or (staw =="StageAward_FullComboW4") or string.find(staw,"W4")) then
 					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/GoodFullcombo_ring.png"));
 				elseif((staw =="StageAward_SingleDigitW3") or (staw =="StageAward_OneW3") or (staw =="StageAward_FullComboW3") or string.find(staw,"W3")) then
-					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/GreatFullcombo_ring.png"));
+					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/Fullcombo_ring.png"));
 				elseif((staw =="StageAward_SingleDigitW2") or (staw =="StageAward_OneW2") or (staw =="StageAward_FullComboW2") ) then
 					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/PerfectFullcombo_ring.png"));
 				elseif (staw =="StageAward_FullComboW1") then
 					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/MarvelousFullcombo_ring.png"));
 				end;
-				(cmd(linear,0.2;zoom,0.65;spin;effectmagnitude,0,0,170))(self);
+				(cmd(linear,0.2;zoom,1;spin;effectmagnitude,0,0,170))(self);
 			end;
 		end;
 		OffCommand=cmd(linear,0.2;zoom,0);
@@ -41,13 +41,13 @@ t[#t+1] = Def.ActorFrame{
 				if((staw =="StageAward_SingleDigitW4") or (staw =="StageAward_OneW4") or (staw =="StageAward_FullComboW4") or string.find(staw,"W4")) then
 					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/GoodFullcombo_lines.png"));
 			elseif((staw =="StageAward_SingleDigitW3") or (staw =="StageAward_OneW3") or (staw =="StageAward_FullComboW3") or string.find(staw,"W3")) then
-					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/GreatFullcombo_lines.png"));
+					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/Fullcombo_lines.png"));
 				elseif((staw =="StageAward_SingleDigitW2") or (staw =="StageAward_OneW2") or (staw =="StageAward_FullComboW2") ) then
 					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/PerfectFullcombo_lines.png"));
 				elseif (staw =="StageAward_FullComboW1") then
 					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/MarvelousFullcombo_lines.png"));
 				end;
-				(cmd(linear,0.2;zoom,0.65;spin;effectmagnitude,0,0,-170))(self);
+				(cmd(linear,0.2;zoom,1;spin;effectmagnitude,0,0,-170))(self);
 			end;
 		end;
 		OffCommand=cmd(linear,0.2;zoom,0);
@@ -57,10 +57,11 @@ end;
 
 for _, pn in pairs(GAMESTATE:GetEnabledPlayers()) do
 t[#t+1] = Def.ActorFrame{
-	InitCommand = function(s) s:x(m "GradePNX"):y(m "GradePNY"):playcommand("Set") end,
+	InitCommand = function(s) s:x(m "GradePNX"):y(m "GradePNY") end,
 	OnCommand = m "GradePNOnCommand",
 	OffCommand = m "GradePNOffCommand",
 	Def.Sprite{
+		BeginCommand = function(s) s:playcommand("Set") end,
 		SetCommand= function(s)
 			local failed = STATSMAN:GetCurStageStats():GetPlayerStageStats(pn):GetFailed();
 			if failed then
@@ -80,6 +81,23 @@ t[#t+1] = Def.ActorFrame{
 				s:Load(THEME:GetPathB("ScreenEvaluation decorations/grade/GradeDisplayEval", ToEnumShortString(tier)))
 			end;
 		end;
+	};
+	Def.Sprite{
+		InitCommand = function(s) s:draworder(100):player(pn):zoom(0):diffusealpha(0):rotationz(370):pause() end,
+		OnCommand=function(self)
+		local staw = STATSMAN:GetCurStageStats():GetPlayerStageStats(pn):GetStageAward();
+			if staw ~= nil then
+				if((staw =="StageAward_SingleDigitW3") or (staw =="StageAward_OneW3") or (staw =="StageAward_FullComboW3") or string.find(staw,"W3")) then
+					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/FullCombo 1x2.png")):setstate(1)
+				elseif((staw =="StageAward_SingleDigitW2") or (staw =="StageAward_OneW2") or (staw =="StageAward_FullComboW2") ) then
+					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/PerfectFullCombo 1x2.png")):setstate(1)
+				elseif (staw =="StageAward_FullComboW1") then
+					self:Load(THEME:GetPathB("","ScreenEvaluation decorations/grade/MarvelousFullCombo 1x2.png")):setstate(1)
+				end;
+				(cmd(sleep,0.316;linear,0.266;diffusealpha,1;zoom,1;rotationz,-15))(self);
+			end;
+		end;
+		OffCommand=cmd(stopeffect;zoomy,0.8;sleep,0.0000;sleep,0.016;linear,0.066;addy,20;diffusealpha,0.56;linear,0.083;diffusealpha,0);
 	};
 };
 end;
