@@ -117,11 +117,11 @@ t[#t+1] = Def.ActorFrame{
 };
 
 if GAMESTATE:IsHumanPlayer(PLAYER_1) then
-  t[#t+1] = LoadActor("options p1.lua");
+  t[#t+1] = LoadActor("options.lua",PLAYER_1);
 end;
 
 if GAMESTATE:IsHumanPlayer(PLAYER_2) then
-  t[#t+1] = LoadActor("options p2.lua");
+  t[#t+1] = LoadActor("options.lua",PLAYER_2);
 end;
 
 return t

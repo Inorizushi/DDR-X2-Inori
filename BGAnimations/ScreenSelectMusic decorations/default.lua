@@ -291,4 +291,33 @@ ut.InitCommand=cmd(SetUpdateFunction,updateTitle);
 
 t[#t+1] = ut;
 
+function play_sample_music()
+    if GAMESTATE:IsCourseMode() then return end
+    local song = GAMESTATE:GetCurrentSong()
+
+    if song then
+        local songpath = song:GetMusicPath()
+        local sample_start = song:GetSampleStart()
+        local sample_len = song:GetSampleLength()
+
+        if songpath and sample_start and sample_len then
+            SOUND:DimMusic(PREFSMAN:GetPreference("SoundVolume"), math.huge)
+            SOUND:PlayMusicPart(songpath, sample_start,sample_len, 0.5, 1.5, true, true)
+        else
+            stop_music()
+        end
+    end
+end
+
+
+--Music Preview
+t[#t+1] = Def.Actor{
+	CurrentSongChangedMessageCommand=function(self)
+		self:queuecommand("PlayMusicPreview")
+	end;
+	PlayMusicPreviewCommand=function(subself) play_sample_music() end,
+
+}
+
+
 return t
